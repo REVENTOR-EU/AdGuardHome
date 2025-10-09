@@ -871,6 +871,11 @@ export type Filter = {
     url: string;
 };
 
+export type Rewrite = {
+    domain: string;
+    answer: string;
+}
+
 export type Rule = {
     filter_list_id: number;
     text: string;
