@@ -2,7 +2,6 @@ package ossvc
 
 import (
 	"context"
-	_ "embed"
 	"fmt"
 	"log/slog"
 	"os"
