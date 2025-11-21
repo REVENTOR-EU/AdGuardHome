@@ -26,6 +26,12 @@ type ActionReload struct {
 	// TODO(e.burkov):  Get rid of github.com/kardianos/service dependency and
 	// replace with the actual configuration.
 	ServiceConf *service.Config
+
+	// Interface is the interface for the service to control.
+	//
+	// TODO(e.burkov):  Get rid of github.com/kardianos/service dependency and
+	// only communicate with the service using OS service API.
+	Interface service.Interface
 }
 
 // Name implements the [Action] interface for *ActionReload.
@@ -41,6 +47,12 @@ type ActionStart struct {
 	// TODO(e.burkov):  Get rid of github.com/kardianos/service dependency and
 	// replace with the actual configuration.
 	ServiceConf *service.Config
+
+	// Interface is the interface for the service to control.
+	//
+	// TODO(e.burkov):  Get rid of github.com/kardianos/service dependency and
+	// only communicate with the service using OS service API.
+	Interface service.Interface
 }
 
 // Name implements the [Action] interface for *ActionStart.
@@ -56,6 +68,12 @@ type ActionStop struct {
 	// TODO(e.burkov):  Get rid of github.com/kardianos/service dependency and
 	// replace with the actual configuration.
 	ServiceConf *service.Config
+
+	// Interface is the interface for the service to control.
+	//
+	// TODO(e.burkov):  Get rid of github.com/kardianos/service dependency and
+	// only communicate with the service using OS service API.
+	Interface service.Interface
 }
 
 // Name implements the [Action] interface for *ActionStop.
@@ -71,6 +89,12 @@ type ActionUninstall struct {
 	// TODO(e.burkov):  Get rid of github.com/kardianos/service dependency and
 	// replace with the actual configuration.
 	ServiceConf *service.Config
+
+	// Interface is the interface for the service to control.
+	//
+	// TODO(e.burkov):  Get rid of github.com/kardianos/service dependency and
+	// only communicate with the service using OS service API.
+	Interface service.Interface
 }
 
 // Name implements the [Action] interface for *ActionUninstall.

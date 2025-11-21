@@ -15,13 +15,13 @@ import (
 
 // TODO(e.burkov):  Declare managers for each OS.
 
-// manager is the implementation of [Manager] that wraps [service.Service].
+// manager is the implementation of [Manager] that uses [service.Service].
 type manager struct {
 	logger  *slog.Logger
 	cmdCons executil.CommandConstructor
 }
 
-// newManager creates a new [Manager] that wraps [service.Service].
+// newManager creates a new [Manager] that uses [service.Service].
 //
 // TODO(e.burkov):  Return error.
 func newManager(_ context.Context, conf *ManagerConfig) (mgr *manager) {
@@ -56,6 +56,10 @@ func (m *manager) Perform(ctx context.Context, action Action) (err error) {
 	}
 }
 
+// statusRestartOnFail is a custom status value used to indicate the service's
+// state of restarting after failed start.
+const statusRestartOnFail = service.StatusStopped + 1
+
 // Status implements the [Manager] interface for *manager.
 func (m *manager) Status(ctx context.Context, name ServiceName) (status Status, err error) {
 	m.logger.InfoContext(ctx, "getting service status", "name", name)
@@ -86,14 +90,7 @@ func (m *manager) Status(ctx context.Context, name ServiceName) (status Status, 
 		return "", fmt.Errorf("getting service status: %w", err)
 	}
 
-	switch svcStatus {
-	case service.StatusRunning:
-		return StatusRunning, nil
-	case service.StatusStopped:
-		return StatusStopped, nil
-	default:
-		return "", fmt.Errorf("service status: %w: %v", errors.ErrBadEnumValue, svcStatus)
-	}
+	return statusToInternal(svcStatus)
 }
 
 // install installs the service in the service manager.
@@ -127,7 +124,7 @@ func (m *manager) install(ctx context.Context, action *ActionInstall) (err error
 func (m *manager) reload(ctx context.Context, action *ActionReload) (err error) {
 	m.logger.InfoContext(ctx, "reloading service", "name", action.ServiceConf.Name)
 
-	s, err := service.New(nil, action.ServiceConf)
+	s, err := service.New(action.Interface, action.ServiceConf)
 	if err != nil {
 		return fmt.Errorf("creating service: %w", err)
 	}
@@ -149,7 +146,7 @@ func (m *manager) start(ctx context.Context, action *ActionStart) (err error) {
 		m.logger.ErrorContext(ctx, "pre-check failed", "err", err)
 	}
 
-	s, err := service.New(nil, action.ServiceConf)
+	s, err := service.New(action.Interface, action.ServiceConf)
 	if err != nil {
 		return fmt.Errorf("creating service: %w", err)
 	}
@@ -166,7 +163,7 @@ func (m *manager) start(ctx context.Context, action *ActionStart) (err error) {
 func (m *manager) stop(ctx context.Context, action *ActionStop) (err error) {
 	m.logger.InfoContext(ctx, "stopping service", "name", action.ServiceConf.Name)
 
-	s, err := service.New(nil, action.ServiceConf)
+	s, err := service.New(action.Interface, action.ServiceConf)
 	if err != nil {
 		return fmt.Errorf("creating service: %w", err)
 	}
@@ -192,7 +189,7 @@ func (m *manager) uninstall(ctx context.Context, action *ActionUninstall) (err e
 		}
 	}
 
-	s, err := service.New(nil, action.ServiceConf)
+	s, err := service.New(action.Interface, action.ServiceConf)
 	if err != nil {
 		return fmt.Errorf("creating service: %w", err)
 	}
@@ -205,7 +202,9 @@ func (m *manager) uninstall(ctx context.Context, action *ActionUninstall) (err e
 		return fmt.Errorf("uninstalling service: %w", err)
 	}
 
-	removeLaunchdStdLogs(ctx, m.logger)
+	if runtime.GOOS == "darwin" {
+		removeLaunchdStdLogs(ctx, m.logger)
+	}
 
 	return nil
 }
