@@ -63,6 +63,7 @@ export const RewritesTable = ({
                     render: () => (
                         <Switch
                             id="rewrite_global_enabled"
+                            data-testid="rewrite-global-toggle"
                             checked={enabled}
                             onChange={() => toggleAllRewrites(!enabled)}
                             disabled={processingSettings}
@@ -83,6 +84,7 @@ export const RewritesTable = ({
                             <div className={s.cellValue}>
                                 <Switch
                                     id={id}
+                                    data-testid={`rewrite-toggle-${domain}`}
                                     checked={enabled}
                                     onChange={() => toggleRewrite(row)}
                                     disabled={processingUpdate}
@@ -153,6 +155,7 @@ export const RewritesTable = ({
                                         onClick={() => editRewrite(currentRewrite)}
                                         disabled={processingUpdate}
                                         className={s.action}
+                                        data-testid={`edit-rewrite-${row.domain}`}
                                     >
                                         <Icon icon="edit" color="gray" />
                                     </button>
@@ -162,6 +165,7 @@ export const RewritesTable = ({
                                         onClick={() => deleteRewrite(currentRewrite)}
                                         disabled={processingDelete}
                                         className={s.action}
+                                        data-testid={`delete-rewrite-${row.domain}`}
                                     >
                                         <Icon icon="delete" color="red" />
                                     </button>

@@ -50,6 +50,8 @@ export const DeleteRewriteModal = ({ rewriteToDelete, setRewriteToDelete }: Prop
                     value: rewriteToDelete.domain,
                 })}
                 buttonVariant="danger"
+                submitTestId="rewrite-delete-confirm"
+                cancelTestId="rewrite-delete-cancel"
             />
         </ModalWrapper>
     );

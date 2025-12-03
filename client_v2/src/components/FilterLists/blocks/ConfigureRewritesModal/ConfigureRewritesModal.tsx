@@ -118,6 +118,7 @@ export const ConfigureRewritesModal = ({ modalId, rewriteToEdit }: Props) => {
                                                 {...field}
                                                 type="text"
                                                 id="domain"
+                                                data-testid="rewrite-domain-input"
                                                 label={
                                                     <>
                                                         {intl.getMessage('upstream_examples_title')}
@@ -165,6 +166,7 @@ export const ConfigureRewritesModal = ({ modalId, rewriteToEdit }: Props) => {
                                                 {...field}
                                                 type="text"
                                                 id="answer"
+                                                data-testid="rewrite-answer-input"
                                                 label={
                                                     <>
                                                         {intl.getMessage('instructions')}
@@ -211,6 +213,7 @@ export const ConfigureRewritesModal = ({ modalId, rewriteToEdit }: Props) => {
                             <Button
                                 type="submit"
                                 id="save"
+                                data-testid="rewrite-save-button"
                                 variant="primary"
                                 size="small"
                                 disabled={processingAdd || processingUpdate || processing}
@@ -222,6 +225,7 @@ export const ConfigureRewritesModal = ({ modalId, rewriteToEdit }: Props) => {
                             <Button
                                 type="button"
                                 id="cancel"
+                                data-testid="rewrite-cancel-button"
                                 variant="secondary"
                                 size="small"
                                 onClick={handleCancel}

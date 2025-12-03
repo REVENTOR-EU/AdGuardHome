@@ -65,7 +65,7 @@ export const DNSRewrites = () => {
                 <div className={s.desc}>{intl.getMessage('dns_rewrites_desc')}</div>
 
                 <div className={s.group}>
-                    <button type="button" className={cn(s.button, s.button_add)} onClick={openAddRewiresModal}>
+                    <button type="button" className={cn(s.button, s.button_add)} onClick={openAddRewiresModal} data-testid="add-rewrite">
                         <Icon icon="plus" color="green" />
                         {intl.getMessage('rewrite_add')}
                     </button>
