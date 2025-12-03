@@ -66,6 +66,7 @@ export const Table = <T extends Record<string, any>>({
     defaultSort,
     onSortChange,
     getRowId = (row: T, index: number) => index,
+    className,
 }: TableProps<T>) => {
     const [state, setState] = useState<TableState>({
         currentPage: 0,
@@ -214,7 +215,7 @@ export const Table = <T extends Record<string, any>>({
     return (
         <div className={s.tableContainer}>
             <div className={s.tableMain}>
-                <div className={s.table}>
+                <div className={cn(s.table, className)}>
                     <div className={s.tableHeader}>
                         {columns.map((column) => (
                             <div

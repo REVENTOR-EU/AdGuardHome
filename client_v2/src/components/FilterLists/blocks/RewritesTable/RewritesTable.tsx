@@ -60,7 +60,7 @@ export const RewritesTable = ({
                 fitContent: true,
                 render: (value: boolean, row: Rewrite) => {
                     const { answer, domain, enabled } = row;
-                    const id = `filter_${domain}`;
+                    const id = `rewrite_${domain}`;
 
                     return (
                         <div className={s.cell}>
@@ -186,7 +186,7 @@ export const RewritesTable = ({
     return (
         <ReactTable<Rewrite>
             data={list || []}
-            className={s.table}
+            className={s.tableRewrites}
             columns={columns}
             emptyTable={emptyTableContent()}
             loading={processing || processingAdd || processingDelete}
