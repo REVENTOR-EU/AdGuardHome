@@ -6,7 +6,7 @@ import intl from 'panel/common/intl';
 import { MODAL_TYPE } from 'panel/helpers/constants';
 import { RootState } from 'panel/initialState';
 import theme from 'panel/lib/theme';
-import { getRewritesList, updateRewrite } from 'panel/actions/rewrites';
+import { getRewritesList, updateRewrite, getRewriteSettings, updateRewriteSettings } from 'panel/actions/rewrites';
 import { Icon } from 'panel/common/ui/Icon';
 import { openModal } from 'panel/reducers/modals';
 import { DeleteRewriteModal } from 'panel/components/FilterLists/blocks/DeleteRewriteModal';
@@ -26,10 +26,11 @@ export const DNSRewrites = () => {
         enabled: false,
     });
 
-    const { list, processing, processingAdd, processingUpdate, processingDelete } = rewrites;
+    const { list, processing, processingAdd, processingUpdate, processingDelete, enabled, processingSettings } = rewrites;
 
     useEffect(() => {
         dispatch(getRewritesList());
+        dispatch(getRewriteSettings());
     }, [dispatch]);
 
     const openAddRewiresModal = () => {
@@ -82,10 +83,13 @@ export const DNSRewrites = () => {
                         processingAdd={processingAdd}
                         processingUpdate={processingUpdate}
                         processingDelete={processingDelete}
+                        processingSettings={processingSettings}
+                        enabled={enabled}
                         addRewritesList={openAddRewiresModal}
                         deleteRewrite={openDeleteRewriteModal}
                         editRewrite={openEditRewriteModal}
                         toggleRewrite={toggleRewrite}
+                        toggleAllRewrites={(enabled: boolean) => dispatch(updateRewriteSettings({ enabled }))}
                     />
                 </div>
 

@@ -16,6 +16,7 @@ export interface TableColumn<T = any> {
     header: {
         text: string;
         className?: string;
+        render?: () => ReactNode;
     };
     accessor?: keyof T | ((row: T) => any);
     render?: (value: any, row: T, index: number) => ReactNode;
@@ -226,9 +227,13 @@ export const Table = <T extends Record<string, any>>({
                                 })}
                                 onClick={() => sortable && column.sortable && handleSort(column.key)}
                             >
-                                <span className={cn(theme.text.t3, theme.text.condenced, theme.text.semibold)}>
-                                    {column.header.text}
-                                </span>
+                                {column.header.render ? (
+                                    column.header.render()
+                                ) : (
+                                    <span className={cn(theme.text.t3, theme.text.condenced, theme.text.semibold)}>
+                                        {column.header.text}
+                                    </span>
+                                )}
 
                                 {sortable && column.sortable && (
                                     <span>

@@ -25,10 +25,13 @@ type Props = {
     processingAdd: boolean;
     processingDelete: boolean;
     processingUpdate: boolean;
+    processingSettings: boolean;
+    enabled: boolean;
     addRewritesList: (...args: unknown[]) => unknown;
     deleteRewrite: (...args: unknown[]) => unknown;
     editRewrite: (...args: unknown[]) => unknown;
     toggleRewrite: (...args: unknown[]) => unknown;
+    toggleAllRewrites: (enabled: boolean) => unknown;
 };
 
 export const RewritesTable = ({
@@ -37,10 +40,13 @@ export const RewritesTable = ({
     processingAdd,
     processingDelete,
     processingUpdate,
+    processingSettings,
+    enabled,
     addRewritesList,
     deleteRewrite,
     editRewrite,
     toggleRewrite,
+    toggleAllRewrites,
 }: Props) => {
     const pageSize = useMemo(
         () => LocalStorageHelper.getItem(LOCAL_STORAGE_KEYS.BLOCKLIST_PAGE_SIZE) || DEFAULT_PAGE_SIZE,
@@ -52,8 +58,16 @@ export const RewritesTable = ({
             {
                 key: 'enabled',
                 header: {
-                    text: intl.getMessage('enabled_table_header'),
+                    text: '',
                     className: s.headerCell,
+                    render: () => (
+                        <Switch
+                            id="rewrite_global_enabled"
+                            checked={enabled}
+                            onChange={() => toggleAllRewrites(!enabled)}
+                            disabled={processingSettings}
+                        />
+                    ),
                 },
                 accessor: 'enabled',
                 sortable: false,
@@ -158,7 +172,7 @@ export const RewritesTable = ({
                 },
             },
         ],
-        [processingDelete, processingUpdate],
+        [processingDelete, processingUpdate, processingSettings, enabled, toggleAllRewrites],
     );
 
     const handlePageSizeChange = (newSize: number) => {
