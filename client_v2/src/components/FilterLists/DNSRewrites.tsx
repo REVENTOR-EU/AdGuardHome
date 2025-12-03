@@ -12,7 +12,6 @@ import { openModal } from 'panel/reducers/modals';
 import { DeleteRewriteModal } from 'panel/components/FilterLists/blocks/DeleteRewriteModal';
 import { ConfigureRewritesModal } from 'panel/components/FilterLists/blocks/ConfigureRewritesModal/ConfigureRewritesModal';
 import { RewritesTable } from './blocks/RewritesTable/RewritesTable';
-import { FilterUpdateModal } from './blocks/FilterUpdateModal';
 
 import s from './FilterLists.module.pcss';
 import { Rewrite } from 'panel/helpers/helpers';
@@ -35,10 +34,6 @@ export const DNSRewrites = () => {
 
     const openAddRewiresModal = () => {
         dispatch(openModal(MODAL_TYPE.ADD_REWRITE));
-    };
-
-    const openAddBlocklistModal = () => {
-        dispatch(openModal(MODAL_TYPE.ADD_BLOCKLIST));
     };
 
     const openEditRewriteModal = (rewrite: Rewrite) => {

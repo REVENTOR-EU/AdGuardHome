@@ -950,5 +950,12 @@
     "instructions": "Instructions",
     "rewrites_answer_input_placeholder": "Enter IP address, CNAME record, A, or AAAA",
     "rewrites_remove_title": "Remove DNS rewrite?",
-    "rewrites_remove_desc": "The DNS rewrite for <strong>%value%</strong> will be removed"
+    "rewrites_remove_desc": "The DNS rewrite for <strong>%value%</strong> will be removed",
+    "rewrites_tooltip_examples_item1": "Rewrite DNS responses for this domain name only",
+    "rewrites_tooltip_examples_item2": "Rewrite DNS responses for all subdomains of example.org",
+    "rewrites_tooltip_instructions_item1": "To resolve the domain name to an IP address, enter an IPv4 address for A records and an IPv6 address for AAAA records",
+    "rewrites_tooltip_instructions_item2": "To redirect the domain name, enter the CNAME record of the target domain",
+    "rewrites_tooltip_instructions_item3": "To keep only A records, enter",
+    "rewrites_tooltip_instructions_item4": "To keep only AАAA records, enter",
+    "rewrite_settings_updated": "DNS rewrite settings successfully updated"
 }

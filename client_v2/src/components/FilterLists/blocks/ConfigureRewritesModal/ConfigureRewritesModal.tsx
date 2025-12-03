@@ -14,6 +14,8 @@ import { RootState } from 'panel/initialState';
 import { addRewrite, updateRewrite } from 'panel/actions/rewrites';
 import { Input } from 'panel/common/controls/Input';
 import { validateAnswer, validateDomain, validateRequiredValue } from 'panel/helpers/validators';
+import { FaqTooltip } from 'panel/common/ui/FaqTooltip';
+import s from './ConfigureRewritesModal.module.pcss';
 
 type FormValues = {
     answer: string;
@@ -116,7 +118,34 @@ export const ConfigureRewritesModal = ({ modalId, rewriteToEdit }: Props) => {
                                                 {...field}
                                                 type="text"
                                                 id="domain"
-                                                label={intl.getMessage('upstream_examples_title')}
+                                                label={
+                                                    <>
+                                                        {intl.getMessage('upstream_examples_title')}
+
+                                                        <FaqTooltip
+                                                            overlayClassName={s.dropdown}
+                                                            menuClassName={s.tooltip}
+                                                            text={
+                                                                <>
+                                                                    <div className={s.tooltipTitle}>
+                                                                        {intl.getMessage('upstream_examples_title')}
+                                                                    </div>
+
+                                                                    {[
+                                                                        { message: 'rewrites_tooltip_examples_item1', code: 'example.org' },
+                                                                        { message: 'rewrites_tooltip_examples_item2', code: '*.example.org' },
+                                                                    ].map((item, index) => (
+                                                                        <div key={index} className={s.tooltipItem}>
+                                                                            <div className={s.tooltipItemDot}></div>
+                                                                            {intl.getMessage(item.message)}
+                                                                            <code>{item.code}</code>
+                                                                        </div>
+                                                                    ))}
+                                                                </>
+                                                            }
+                                                        />
+                                                    </>
+                                                }
                                                 placeholder={intl.getMessage('rewrite_domain_input_placeholder')}
                                                 errorMessage={fieldState.error?.message}
                                             />
@@ -136,7 +165,39 @@ export const ConfigureRewritesModal = ({ modalId, rewriteToEdit }: Props) => {
                                                 {...field}
                                                 type="text"
                                                 id="answer"
-                                                label={intl.getMessage('instructions')}
+                                                label={
+                                                    <>
+                                                        {intl.getMessage('instructions')}
+
+                                                        <FaqTooltip
+                                                            overlayClassName={s.dropdown}
+                                                            menuClassName={s.tooltip}
+                                                            text={
+                                                                <>
+                                                                    <div className={s.tooltipTitle}>
+                                                                        {intl.getMessage('instructions')}
+                                                                    </div>
+
+                                                                    {[
+                                                                        { message: 'rewrites_tooltip_instructions_item1' },
+                                                                        { message: 'rewrites_tooltip_instructions_item2' },
+                                                                        { message: 'rewrites_tooltip_instructions_item3', code: 'A' },
+                                                                        { message: 'rewrites_tooltip_instructions_item4', code: 'AAAA' },
+                                                                    ].map((item, index) => (
+                                                                        <div key={index} className={s.tooltipItem}>
+                                                                            <div className={s.tooltipItemDot}></div>
+                                                                            {intl.getMessage(item.message)}
+
+                                                                            {item.code && (
+                                                                                <code>{item.code}</code>
+                                                                            )}
+                                                                        </div>
+                                                                    ))}
+                                                                </>
+                                                            }
+                                                        />
+                                                    </>
+                                                }
                                                 placeholder={intl.getMessage('rewrites_answer_input_placeholder')}
                                                 errorMessage={fieldState.error?.message}
                                             />
