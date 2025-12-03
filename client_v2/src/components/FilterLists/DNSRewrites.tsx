@@ -40,22 +40,23 @@ export const DNSRewrites = () => {
         dispatch(openModal(MODAL_TYPE.ADD_BLOCKLIST));
     };
 
-    const openEditRewriteModal = (answer: string, domain: string, enabled: boolean) => {
-        setCurrentRewrite({ answer, domain, enabled });
+    const openEditRewriteModal = (rewrite: Rewrite) => {
+        setCurrentRewrite(rewrite);
         dispatch(openModal(MODAL_TYPE.EDIT_REWRITE));
     };
 
-    const openDeleteRewriteModal = (answer: string, domain: string, enabled: boolean) => {
-        setCurrentRewrite({ answer, domain, enabled });
+    const openDeleteRewriteModal = (rewrite: Rewrite) => {
+        setCurrentRewrite(rewrite);
         dispatch(openModal(MODAL_TYPE.DELETE_REWRITE));
     };
 
     const toggleRewrite = (rewrite: Rewrite) => {
-        const { enabled } = rewrite;
+        const updatedRewrite = { ...rewrite, enabled: !rewrite.enabled };
 
-        rewrite.enabled = !enabled;
-
-        dispatch(updateRewrite(rewrite));
+        dispatch(updateRewrite({
+            target: rewrite,
+            update: updatedRewrite,
+        }));
     };
 
     return (

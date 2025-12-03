@@ -24,7 +24,7 @@ type FormValues = {
 const defaultValues: FormValues = {
     answer: '',
     domain: '',
-    enabled: true,
+    enabled: false,
 };
 
 type ConfigureRewritesModalIdType = 'ADD_REWRITE' | 'EDIT_REWRITE';
@@ -79,7 +79,10 @@ export const ConfigureRewritesModal = ({ modalId, rewriteToEdit }: Props) => {
                 break;
             }
             case MODAL_TYPE.EDIT_REWRITE: {
-                dispatch(updateRewrite({ answer: values.answer, domain: values.domain, enabled: true }));
+                dispatch(updateRewrite({
+                    target: rewriteToEdit,
+                    update: { answer: values.answer, domain: values.domain, enabled: values.enabled },
+                }));
                 dispatch(closeModal());
                 break;
             }
