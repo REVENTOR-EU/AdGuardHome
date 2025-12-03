@@ -6,9 +6,10 @@ import { LOCAL_STORAGE_KEYS, LocalStorageHelper } from 'panel/helpers/localStora
 import { Table as ReactTable, TableColumn } from 'panel/common/ui/Table';
 import { Icon } from 'panel/common/ui/Icon';
 import theme from 'panel/lib/theme';
+import { Switch } from 'panel/common/controls/Switch';
 
 import cn from 'clsx';
-import s from './ListsTable.module.pcss';
+import s from '../ListsTable/ListsTable.module.pcss';
 
 const DEFAULT_PAGE_SIZE = 10;
 
@@ -25,20 +26,21 @@ type Props = {
     processingDelete: boolean;
     processingUpdate: boolean;
     addRewritesList: (...args: unknown[]) => unknown;
-    handleDelete: (...args: unknown[]) => unknown;
-    toggleRewritesModal: (...args: unknown[]) => unknown;
-    toggleRewritesList: (url: string, data: RewriteToggleData) => void;
+    deleteRewrite: (...args: unknown[]) => unknown;
+    editRewrite: (...args: unknown[]) => unknown;
+    toggleRewrite: (...args: unknown[]) => unknown;
 };
 
-export const ListsTable = ({
+export const RewritesTable = ({
     list,
     processing,
     processingAdd,
     processingDelete,
     processingUpdate,
     addRewritesList,
-    handleDelete,
-    toggleRewritesModal,
+    deleteRewrite,
+    editRewrite,
+    toggleRewrite,
 }: Props) => {
     const pageSize = useMemo(
         () => LocalStorageHelper.getItem(LOCAL_STORAGE_KEYS.BLOCKLIST_PAGE_SIZE) || DEFAULT_PAGE_SIZE,
@@ -47,6 +49,35 @@ export const ListsTable = ({
 
     const columns: TableColumn<Rewrite>[] = useMemo(
         () => [
+            {
+                key: 'enabled',
+                header: {
+                    text: intl.getMessage('enabled_table_header'),
+                    className: s.headerCell,
+                },
+                accessor: 'enabled',
+                sortable: false,
+                fitContent: true,
+                render: (value: boolean, row: Rewrite) => {
+                    const { answer, domain, enabled } = row;
+                    const id = `filter_${domain}`;
+
+                    return (
+                        <div className={s.cell}>
+                            <span className={s.cellLabel}>{intl.getMessage('enabled_table_header')}</span>
+
+                            <div className={s.cellValue}>
+                                <Switch
+                                    id={id}
+                                    checked={enabled}
+                                    onChange={() => toggleRewrite(row)}
+                                    disabled={processingUpdate}
+                                />
+                            </div>
+                        </div>
+                    );
+                },
+            },
             {
                 key: 'domain',
                 header: {
@@ -94,6 +125,7 @@ export const ListsTable = ({
                     const currentRewrite = {
                         answer: row.answer,
                         domain: row.domain,
+                        enabled: row.enabled,
                     };
 
                     return (
@@ -104,7 +136,7 @@ export const ListsTable = ({
                                 <div className={s.cellActions}>
                                     <button
                                         type="button"
-                                        onClick={() => toggleRewritesModal(currentRewrite)}
+                                        onClick={() => editRewrite(currentRewrite)}
                                         disabled={processingUpdate}
                                         className={s.action}
                                     >
@@ -113,7 +145,7 @@ export const ListsTable = ({
 
                                     <button
                                         type="button"
-                                        onClick={() => handleDelete(currentRewrite)}
+                                        onClick={() => deleteRewrite(currentRewrite)}
                                         disabled={processingDelete}
                                         className={s.action}
                                     >
@@ -139,7 +171,7 @@ export const ListsTable = ({
                 <Icon icon="not_found_search" color="gray" className={s.emptyTableIcon} />
 
                 <div className={cn(theme.text.t3, s.emptyTableDesc)}>
-                    {intl.getMessage('allowlist_empty', {
+                    {intl.getMessage('rewrites_empty', {
                         button: (text: string) => (
                             <button className={cn(theme.text.t3, theme.link.link)} type="button" onClick={() => addRewritesList()}>
                                 {text}

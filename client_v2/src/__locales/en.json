@@ -944,5 +944,11 @@
     "rewrite_add": "Add DNS rewrite",
     "rewrites_empty": "No rewrites yet — <button>add your first one</button>",
     "domain": "Domain",
-    "result": "Result"
+    "result": "Result",
+    "disable_dns_rewrites": "Disable DNS rewrites",
+    "rewrite_domain_input_placeholder": "Enter the domain name or wildcard",
+    "instructions": "Instructions",
+    "rewrites_answer_input_placeholder": "Enter IP address, CNAME record, A, or AAAA",
+    "rewrites_remove_title": "Remove DNS rewrite?",
+    "rewrites_remove_desc": "The DNS rewrite for <strong>%value%</strong> will be removed"
 }

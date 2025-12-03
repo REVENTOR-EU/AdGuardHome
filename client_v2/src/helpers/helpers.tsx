@@ -874,6 +874,7 @@ export type Filter = {
 export type Rewrite = {
     domain: string;
     answer: string;
+    enabled: boolean;
 }
 
 export type Rule = {

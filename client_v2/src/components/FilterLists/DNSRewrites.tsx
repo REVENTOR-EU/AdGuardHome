@@ -6,54 +6,56 @@ import intl from 'panel/common/intl';
 import { MODAL_TYPE } from 'panel/helpers/constants';
 import { RootState } from 'panel/initialState';
 import theme from 'panel/lib/theme';
-import { getFilteringStatus, toggleFilterStatus, refreshFilters } from 'panel/actions/filtering';
+import { getRewritesList, updateRewrite } from 'panel/actions/rewrites';
 import { Icon } from 'panel/common/ui/Icon';
 import { openModal } from 'panel/reducers/modals';
-import { DeleteBlocklistModal } from 'panel/components/FilterLists/blocks/DeleteBlocklistModal';
-import { ConfigureBlocklistModal } from 'panel/components/FilterLists/blocks/ConfigureBlocklistModal';
-import { ListsTable, TABLE_IDS } from './blocks/ListsTable/ListsTable';
+import { DeleteRewriteModal } from 'panel/components/FilterLists/blocks/DeleteRewriteModal';
+import { ConfigureRewritesModal } from 'panel/components/FilterLists/blocks/ConfigureRewritesModal/ConfigureRewritesModal';
+import { RewritesTable } from './blocks/RewritesTable/RewritesTable';
 import { FilterUpdateModal } from './blocks/FilterUpdateModal';
 
 import s from './FilterLists.module.pcss';
+import { Rewrite } from 'panel/helpers/helpers';
 
 export const DNSRewrites = () => {
     const dispatch = useDispatch();
     const { rewrites } = useSelector((state: RootState) => state);
-    const [currentFilter, setCurrentFilter] = useState<{ url: string; name: string; enabled?: boolean }>({
-        url: '',
-        name: '',
+    const [currentRewrite, setCurrentRewrite] = useState<{ answer: string; domain: string; enabled: boolean }>({
+        answer: '',
+        domain: '',
+        enabled: false,
     });
 
-    const {  } = rewrites;
+    const { list, processing, processingAdd, processingUpdate, processingDelete } = rewrites;
 
     useEffect(() => {
-        dispatch(getFilteringStatus());
+        dispatch(getRewritesList());
     }, [dispatch]);
 
-    const toggleRewrite = (url: string, data: { name: string; url: string; enabled: boolean }) => {
-        dispatch(toggleFilterStatus(url, data));
-    };
-
-    const handleRefresh = () => {
-        dispatch(refreshFilters({ whitelist: false }));
-    };
-
-    const openFilterUpdateModal = () => {
-        dispatch(openModal(MODAL_TYPE.FILTER_UPDATE));
+    const openAddRewiresModal = () => {
+        dispatch(openModal(MODAL_TYPE.ADD_REWRITE));
     };
 
     const openAddBlocklistModal = () => {
         dispatch(openModal(MODAL_TYPE.ADD_BLOCKLIST));
     };
 
-    const openEditBlocklistModal = (url: string, name: string, enabled: boolean) => {
-        setCurrentFilter({ url, name, enabled });
-        dispatch(openModal(MODAL_TYPE.EDIT_BLOCKLIST));
+    const openEditRewriteModal = (answer: string, domain: string, enabled: boolean) => {
+        setCurrentRewrite({ answer, domain, enabled });
+        dispatch(openModal(MODAL_TYPE.EDIT_REWRITE));
     };
 
-    const openDeleteBlocklistModal = (url: string, name: string) => {
-        setCurrentFilter({ url, name });
-        dispatch(openModal(MODAL_TYPE.DELETE_BLOCKLIST));
+    const openDeleteRewriteModal = (answer: string, domain: string, enabled: boolean) => {
+        setCurrentRewrite({ answer, domain, enabled });
+        dispatch(openModal(MODAL_TYPE.DELETE_REWRITE));
+    };
+
+    const toggleRewrite = (rewrite: Rewrite) => {
+        const { enabled } = rewrite;
+
+        rewrite.enabled = !enabled;
+
+        dispatch(updateRewrite(rewrite));
     };
 
     return (
@@ -66,31 +68,31 @@ export const DNSRewrites = () => {
                 <div className={s.desc}>{intl.getMessage('dns_rewrites_desc')}</div>
 
                 <div className={s.group}>
-                    <button type="button" className={cn(s.button, s.button_add)} onClick={openAddBlocklistModal}>
+                    <button type="button" className={cn(s.button, s.button_add)} onClick={openAddRewiresModal}>
                         <Icon icon="plus" color="green" />
                         {intl.getMessage('rewrite_add')}
                     </button>
                 </div>
 
                 <div className={cn(s.group, s.stretchSelf)}>
-                    <ListsTable
-                        tableId={TABLE_IDS.DNSREWRITES_TABLE}
-                        filters={filters}
-                        processingConfigFilter={processingConfigFilter}
-                        toggleRewritesList={toggleRewrite}
-                        addFilterList={openAddBlocklistModal}
-                        editFilterList={openEditBlocklistModal}
-                        deleteFilterList={openDeleteBlocklistModal}
+                    <RewritesTable
+                        list={list}
+                        processing={processing}
+                        processingAdd={processingAdd}
+                        processingUpdate={processingUpdate}
+                        processingDelete={processingDelete}
+                        addRewritesList={openAddRewiresModal}
+                        deleteRewrite={openDeleteRewriteModal}
+                        editRewrite={openEditRewriteModal}
+                        toggleRewrite={toggleRewrite}
                     />
                 </div>
 
-                <ConfigureBlocklistModal modalId={MODAL_TYPE.ADD_BLOCKLIST} />
+                <ConfigureRewritesModal modalId={MODAL_TYPE.ADD_REWRITE} />
 
-                <ConfigureBlocklistModal modalId={MODAL_TYPE.EDIT_BLOCKLIST} filterToEdit={currentFilter} />
+                <ConfigureRewritesModal modalId={MODAL_TYPE.EDIT_REWRITE} rewriteToEdit={currentRewrite} />
 
-                <DeleteBlocklistModal filterToDelete={currentFilter} setFilterToDelete={setCurrentFilter} />
-
-                <FilterUpdateModal />
+                <DeleteRewriteModal rewriteToDelete={currentRewrite} setRewriteToDelete={setCurrentRewrite} />
             </div>
         </div>
     );
