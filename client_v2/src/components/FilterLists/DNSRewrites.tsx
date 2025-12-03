@@ -11,10 +11,10 @@ import { Icon } from 'panel/common/ui/Icon';
 import { openModal } from 'panel/reducers/modals';
 import { DeleteRewriteModal } from 'panel/components/FilterLists/blocks/DeleteRewriteModal';
 import { ConfigureRewritesModal } from 'panel/components/FilterLists/blocks/ConfigureRewritesModal/ConfigureRewritesModal';
+import { Rewrite } from 'panel/helpers/helpers';
 import { RewritesTable } from './blocks/RewritesTable/RewritesTable';
 
 import s from './FilterLists.module.pcss';
-import { Rewrite } from 'panel/helpers/helpers';
 
 export const DNSRewrites = () => {
     const dispatch = useDispatch();
@@ -25,7 +25,15 @@ export const DNSRewrites = () => {
         enabled: false,
     });
 
-    const { list, processing, processingAdd, processingUpdate, processingDelete, enabled, processingSettings } = rewrites;
+    const {
+        list,
+        processing,
+        processingAdd,
+        processingUpdate,
+        processingDelete,
+        enabled,
+        processingSettings,
+    } = rewrites;
 
     useEffect(() => {
         dispatch(getRewritesList());

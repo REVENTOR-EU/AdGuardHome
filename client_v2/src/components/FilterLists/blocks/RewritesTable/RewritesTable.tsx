@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import { Rewrite, formatShortDateTime } from 'panel/helpers/helpers';
+import { Rewrite } from 'panel/helpers/helpers';
 import intl from 'panel/common/intl';
 import { LOCAL_STORAGE_KEYS, LocalStorageHelper } from 'panel/helpers/localStorageHelper';
 import { Table as ReactTable, TableColumn } from 'panel/common/ui/Table';
@@ -12,12 +12,6 @@ import cn from 'clsx';
 import s from '../ListsTable/ListsTable.module.pcss';
 
 const DEFAULT_PAGE_SIZE = 10;
-
-type RewriteToggleData = {
-    domain: string;
-    answer: string;
-    enabled: boolean;
-};
 
 type Props = {
     list: Rewrite[];
@@ -74,7 +68,7 @@ export const RewritesTable = ({
                 sortable: false,
                 fitContent: true,
                 render: (value: boolean, row: Rewrite) => {
-                    const { answer, domain, enabled } = row;
+                    const { domain, enabled } = row;
                     const id = `rewrite_${domain}`;
 
                     return (
