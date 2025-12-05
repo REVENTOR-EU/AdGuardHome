@@ -11,10 +11,15 @@ import { Icon } from 'panel/common/ui/Icon';
 import { openModal } from 'panel/reducers/modals';
 import { DeleteRewriteModal } from 'panel/components/FilterLists/blocks/DeleteRewriteModal';
 import { ConfigureRewritesModal } from 'panel/components/FilterLists/blocks/ConfigureRewritesModal/ConfigureRewritesModal';
-import { Rewrite } from 'panel/helpers/helpers';
 import { RewritesTable } from './blocks/RewritesTable/RewritesTable';
 
 import s from './FilterLists.module.pcss';
+
+export type Rewrite = {
+    domain: string;
+    answer: string;
+    enabled: boolean;
+}
 
 export const DNSRewrites = () => {
     const dispatch = useDispatch();

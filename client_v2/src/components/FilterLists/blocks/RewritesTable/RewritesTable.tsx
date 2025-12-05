@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import { Rewrite } from 'panel/helpers/helpers';
+import { Rewrite } from '../../DNSRewrites';
 import intl from 'panel/common/intl';
 import { LOCAL_STORAGE_KEYS, LocalStorageHelper } from 'panel/helpers/localStorageHelper';
 import { Table as ReactTable, TableColumn } from 'panel/common/ui/Table';

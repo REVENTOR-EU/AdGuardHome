@@ -92,9 +92,9 @@ export const normalizeLogs = (logs: any) =>
         const processResponse = (data: any) =>
             data
                 ? data.map((response: any) => {
-                      const { value, type, ttl } = response;
-                      return `${type}: ${value} (ttl=${ttl})`;
-                  })
+                    const { value, type, ttl } = response;
+                    return `${type}: ${value} (ttl=${ttl})`;
+                })
                 : [];
 
         let newRules = rules;
@@ -169,17 +169,17 @@ export const addClientInfo = (data: any, clients: any, ...params: any[]) =>
 export const normalizeFilters = (filters: any) =>
     filters
         ? filters.map((filter: any) => {
-              const { id, url, enabled, last_updated, name = 'Default name', rules_count = 0 } = filter;
+            const { id, url, enabled, last_updated, name = 'Default name', rules_count = 0 } = filter;
 
-              return {
-                  id,
-                  url,
-                  enabled,
-                  lastUpdated: last_updated,
-                  name,
-                  rulesCount: rules_count,
-              };
-          })
+            return {
+                id,
+                url,
+                enabled,
+                lastUpdated: last_updated,
+                name,
+                rulesCount: rules_count,
+            };
+        })
         : [];
 
 export const normalizeFilteringStatus = (filteringStatus: any) => {
@@ -870,12 +870,6 @@ export type Filter = {
     rulesCount: number;
     url: string;
 };
-
-export type Rewrite = {
-    domain: string;
-    answer: string;
-    enabled: boolean;
-}
 
 export type Rule = {
     filter_list_id: number;

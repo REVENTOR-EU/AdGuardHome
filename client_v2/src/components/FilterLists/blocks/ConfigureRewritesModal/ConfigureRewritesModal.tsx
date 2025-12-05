@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import intl from 'panel/common/intl';
 import { Dialog } from 'panel/common/ui/Dialog/Dialog';
 import { MODAL_TYPE } from 'panel/helpers/constants';
+import cn from 'clsx';
 
 import { ModalWrapper } from 'panel/common/ui/ModalWrapper';
 import { useDispatch, useSelector } from 'react-redux';
@@ -128,7 +129,7 @@ export const ConfigureRewritesModal = ({ modalId, rewriteToEdit }: Props) => {
                                                             menuClassName={s.tooltip}
                                                             text={
                                                                 <>
-                                                                    <div className={s.tooltipTitle}>
+                                                                    <div className={cn(theme.text.t3, s.tooltipTitle)}>
                                                                         {intl.getMessage('upstream_examples_title')}
                                                                     </div>
 
@@ -176,7 +177,7 @@ export const ConfigureRewritesModal = ({ modalId, rewriteToEdit }: Props) => {
                                                             menuClassName={s.tooltip}
                                                             text={
                                                                 <>
-                                                                    <div className={s.tooltipTitle}>
+                                                                    <div className={cn(theme.text.t3, s.tooltipTitle)}>
                                                                         {intl.getMessage('instructions')}
                                                                     </div>
 
