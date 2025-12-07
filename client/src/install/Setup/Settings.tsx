@@ -44,6 +44,8 @@ export type DnsConfig = {
 export type SettingsFormValues = {
     web: WebConfig;
     dns: DnsConfig;
+    domain: string;
+    email: string;
 };
 
 type StaticIpType = {
@@ -107,6 +109,8 @@ export const Settings = ({ handleSubmit, handleFix, validateForm, config, interf
             ip: config.dns.ip || ALL_INTERFACES_IP,
             port: config.dns.port || STANDARD_DNS_PORT,
         },
+        domain: '',
+        email: '',
     };
 
     const {
@@ -147,6 +151,8 @@ export const Settings = ({ handleSubmit, handleFix, validateForm, config, interf
                 ip: dnsIpVal,
                 port: dnsPortVal,
             },
+            domain: watchFields.domain || '',
+            email: watchFields.email || '',
         });
     }, [webIpVal, webPortVal, dnsIpVal, dnsPortVal]);
 
@@ -442,6 +448,74 @@ export const Settings = ({ handleSubmit, handleFix, validateForm, config, interf
                             isDns={true}
                         />
                     </div>
+                </div>
+            </div>
+
+            <div className="setup__group">
+                <div className="setup__subtitle">
+                    <Trans>install_settings_ssl</Trans>
+                </div>
+
+                <div className="row">
+                    <div className="col-6">
+                        <div className="form-group">
+                            <label>
+                                <Trans>install_settings_domain</Trans>
+                            </label>
+                            <Controller
+                                name="domain"
+                                control={control}
+                                rules={{
+                                    required: t('form_error_required'),
+                                    pattern: {
+                                        value: /^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                                        message: t('form_error_domain'),
+                                    },
+                                }}
+                                render={({ field, fieldState }) => (
+                                    <Input
+                                        {...field}
+                                        type="text"
+                                        data-testid="install_domain"
+                                        placeholder="example.com"
+                                        error={fieldState.error?.message}
+                                    />
+                                )}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="col-6">
+                        <div className="form-group">
+                            <label>
+                                <Trans>install_settings_email</Trans>
+                            </label>
+                            <Controller
+                                name="email"
+                                control={control}
+                                rules={{
+                                    required: t('form_error_required'),
+                                    pattern: {
+                                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                        message: t('form_error_email'),
+                                    },
+                                }}
+                                render={({ field, fieldState }) => (
+                                    <Input
+                                        {...field}
+                                        type="email"
+                                        data-testid="install_email"
+                                        placeholder="user@example.com"
+                                        error={fieldState.error?.message}
+                                    />
+                                )}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="setup__desc">
+                    <Trans>install_settings_ssl_desc</Trans>
                 </div>
             </div>
 

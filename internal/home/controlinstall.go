@@ -359,8 +359,10 @@ type applyConfigReq struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 
-	Web applyConfigReqEnt `json:"web"`
-	DNS applyConfigReqEnt `json:"dns"`
+	Web    applyConfigReqEnt `json:"web"`
+	DNS    applyConfigReqEnt `json:"dns"`
+	Domain string             `json:"domain"`
+	Email  string             `json:"email"`
 }
 
 // copyInstallSettings copies the installation parameters between two
@@ -521,6 +523,24 @@ func (web *webAPI) finalizeInstall(
 		return
 	}
 
+	// Run Certbot to generate certificates if domain and email are provided
+	if req.Domain != "" && req.Email != "" {
+		err = runCertbot(ctx, l, req.Domain, req.Email, web.cmdCons)
+		if err != nil {
+			aghhttp.ErrorAndLog(ctx, l, r, w, http.StatusInternalServerError, "failed to generate certificates: %s", err)
+
+			return
+		}
+
+		// Update TLS config to enable HTTPS
+		config.TLS.Enabled = true
+		config.TLS.ServerName = req.Domain
+		config.TLS.PortHTTPS = 443 // default HTTPS port
+		config.TLS.CertificatePath = fmt.Sprintf("/etc/letsencrypt/live/%s/fullchain.pem", req.Domain)
+		config.TLS.PrivateKeyPath = fmt.Sprintf("/etc/letsencrypt/live/%s/privkey.pem", req.Domain)
+		config.TLS.ForceHTTPS = true
+	}
+
 	err = config.write(
 		ctx,
 		web.logger,
@@ -630,6 +650,43 @@ func startMods(
 		closeDNSServer(ctx)
 
 		return err
+	}
+
+	return nil
+}
+
+// runCertbot runs Certbot to generate Let's Encrypt certificates.
+// cmdCons must not be nil.
+func runCertbot(
+	ctx context.Context,
+	l *slog.Logger,
+	domain string,
+	email string,
+	cmdCons executil.CommandConstructor,
+) (err error) {
+	defer func() { err = errors.Annotate(err, "running certbot: %w") }()
+
+	cmd := "certbot"
+	args := []string{
+		"certonly",
+		"--standalone",
+		"-d", domain,
+		"--agree-tos",
+		"--email", email,
+		"--non-interactive",
+	}
+
+	l.InfoContext(ctx, "running certbot", "domain", domain, "email", email)
+
+	err = executil.RunWithPeek(
+		ctx,
+		cmdCons,
+		agh.DefaultOutputLimit,
+		cmd,
+		args...,
+	)
+	if err != nil {
+		return fmt.Errorf("executing certbot: %w", err)
 	}
 
 	return nil

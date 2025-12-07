@@ -73,6 +73,8 @@ const install = handleActions(
                 web,
                 dns,
                 staticIp,
+                domain: payload.domain,
+                email: payload.email,
                 processingCheck: false,
             };
             return newState;
@@ -102,6 +104,8 @@ const install = handleActions(
         },
         interfaces: {},
         dnsVersion: '',
+        domain: '',
+        email: '',
     },
 );
 

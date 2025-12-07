@@ -50,7 +50,7 @@ import { RootState } from '../../initialState';
 const ROUTES = [
     {
         path: MENU_URLS.root,
-        component: Dashboard,
+        component: SetupGuide,
         exact: true,
     },
     {

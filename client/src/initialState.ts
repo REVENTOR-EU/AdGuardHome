@@ -41,6 +41,8 @@ export type InstallData = {
     };
     interfaces: InstallInterface[];
     dnsVersion: string;
+    domain: string;
+    email: string;
 };
 
 export type EncryptionData = {

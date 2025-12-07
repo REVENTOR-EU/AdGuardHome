@@ -27,7 +27,7 @@ export const Setup = () => {
     const dispatch = useDispatch();
 
     const install = useSelector((state: InstallState) => state.install);
-    const { processingDefault, step, web, dns, staticIp, interfaces } = install;
+    const { processingDefault, step, web, dns, staticIp, interfaces, domain, email } = install;
 
     useEffect(() => {
         dispatch(actionCreators.getDefaultAddresses());
@@ -35,13 +35,15 @@ export const Setup = () => {
 
     const handleFormSubmit = (values: any) => {
         const config = { ...values };
-        delete config.staticIp;
+        delete config.confirm_password;
 
         if (web.port && dns.port) {
             dispatch(
                 actionCreators.setAllSettings({
                     web,
                     dns,
+                    domain,
+                    email,
                     ...config,
                 }),
             );

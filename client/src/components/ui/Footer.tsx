@@ -169,6 +169,14 @@ const Footer = () => {
                     </div>
                 </div>
             </div>
+
+            <footer className="footer footer--banner">
+                <div className="container">
+                    <a href="https://kutt.it/9eDqsx" target="_blank" rel="noopener">
+                        <img src="https://reventor.eu/footer-banner/reventor-footer-banner-white.svg" alt="Webdesign by REVENTOR" style="width: 250px; display: block; margin: 0 auto;" />
+                    </a>
+                </div>
+            </footer>
         </>
     );
 };
