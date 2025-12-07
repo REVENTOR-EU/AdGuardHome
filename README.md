@@ -74,20 +74,22 @@ It operates as a DNS server that re-routes tracking domains to a â€œblack holeâ€
 To install with `curl` run the following command:
 
 ```sh
-curl -s -S -L https://raw.githubusercontent.com/AdguardTeam/AdGuardHome/master/scripts/install.sh | sh -s -- -v
+curl -s -S -L https://raw.githubusercontent.com/REVENTOR-EU/AdGuardHome/master/scripts/install.sh | sh -s -- -v
 ```
 
 To install with `wget` run the following command:
 
 ```sh
-wget --no-verbose -O - https://raw.githubusercontent.com/AdguardTeam/AdGuardHome/master/scripts/install.sh | sh -s -- -v
+wget --no-verbose -O - https://raw.githubusercontent.com/REVENTOR-EU/AdGuardHome/master/scripts/install.sh | sh -s -- -v
 ```
 
 To install with `fetch` run the following command:
 
 ```sh
-fetch -o - https://raw.githubusercontent.com/AdguardTeam/AdGuardHome/master/scripts/install.sh | sh -s -- -v
+fetch -o - https://raw.githubusercontent.com/REVENTOR-EU/AdGuardHome/master/scripts/install.sh | sh -s -- -v
 ```
+
+The script will automatically install required build dependencies (git, make, golang-go, nodejs, npm) on Linux systems if they are missing. On other systems, please ensure these are installed manually.
 
 The script also accepts some options:
 
@@ -208,6 +210,8 @@ You will need this to build AdGuard Home:
 - [Go](https://golang.org/dl/) v1.25 or later;
 - [Node.js](https://nodejs.org/en/download/) v24.10.0 or later;
 - [npm](https://www.npmjs.com/) v10.8 or later;
+
+**Note:** The automated install script will automatically install these dependencies on Linux systems if they are missing.
 
 ### <a href="#building" id="building" name="building">Building</a>
 
@@ -334,13 +338,13 @@ There are three options how you can install an unstable version:
    Script to install a beta version:
 
    ```sh
-   curl -s -S -L https://raw.githubusercontent.com/AdguardTeam/AdGuardHome/master/scripts/install.sh | sh -s -- -c beta
+   curl -s -S -L https://raw.githubusercontent.com/REVENTOR-EU/AdGuardHome/master/scripts/install.sh | sh -s -- -c beta
    ```
 
    Script to install an edge version:
 
    ```sh
-   curl -s -S -L https://raw.githubusercontent.com/AdguardTeam/AdGuardHome/master/scripts/install.sh | sh -s -- -c edge
+   curl -s -S -L https://raw.githubusercontent.com/REVENTOR-EU/AdGuardHome/master/scripts/install.sh | sh -s -- -c edge
    ```
 
 [wiki-platf]: https://github.com/AdguardTeam/AdGuardHome/wiki/Platforms
