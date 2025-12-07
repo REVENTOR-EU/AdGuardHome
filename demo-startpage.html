@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdGuard Home - DNS Setup Guide</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        .desc {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .dns-addresses {
+            background: #f1f3f4;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+        .address {
+            font-family: monospace;
+            background: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            margin: 5px 0;
+            display: inline-block;
+            border: 1px solid #ddd;
+        }
+        .tabs {
+            margin-top: 30px;
+        }
+        .tab-buttons {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+        .tab-button {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-bottom: 2px solid transparent;
+        }
+        .tab-button.active {
+            border-bottom-color: #007bff;
+            color: #007bff;
+        }
+        .tab-content {
+            padding: 20px 0;
+        }
+        .tab-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .tab-text {
+            line-height: 1.6;
+        }
+        ol {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+        .footer a {
+            color: white;
+            text-decoration: none;
+        }
+        .banner {
+            display: block;
+            margin: 0 auto;
+            max-width: 250px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="title">How to Setup REVENTOR DNS</div>
+            <div class="desc">
+                REVENTOR DNS provides comprehensive protection against ads, trackers, malware, and unwanted content. Enjoy faster browsing, enhanced privacy, and parental controls across all your devices.
+                <br><br>
+                Your DNS server addresses:
+            </div>
+            <div class="dns-addresses">
+                <div class="address">192.168.1.100</div><br>
+                <div class="address">dns.reventor.eu</div>
+            </div>
+            <div class="desc">
+                Choose your device type below for setup instructions. Use the IP address for most devices, or the domain name for private DNS settings on mobile devices.
+            </div>
+
+            <div class="tabs">
+                <div class="tab-buttons">
+                    <button class="tab-button active" onclick="showTab('router')">Router</button>
+                    <button class="tab-button" onclick="showTab('windows')">Windows</button>
+                    <button class="tab-button" onclick="showTab('macos')">macOS</button>
+                    <button class="tab-button" onclick="showTab('android')">Android</button>
+                    <button class="tab-button" onclick="showTab('ios')">iOS</button>
+                </div>
+
+                <div id="router" class="tab-content">
+                    <div class="tab-title">Router Setup</div>
+                    <div class="tab-text">
+                        <ol>
+                            <li>Open your router's web interface (usually 192.168.1.1 or 192.168.0.1)</li>
+                            <li>Log in with your router credentials</li>
+                            <li>Navigate to Network > DHCP or WAN settings</li>
+                            <li>Find DNS server settings and set to: 192.168.1.100</li>
+                            <li>Save changes and reboot router if required</li>
+                        </ol>
+                        <strong>Note:</strong> This will protect all devices on your network automatically.
+                    </div>
+                </div>
+
+                <div id="windows" class="tab-content" style="display: none;">
+                    <div class="tab-title">Windows Setup</div>
+                    <div class="tab-text">
+                        <ol>
+                            <li>Right-click Start button > Settings > Network & Internet</li>
+                            <li>Click Properties under your network connection</li>
+                            <li>Scroll to IP settings > Edit</li>
+                            <li>Change to Manual and set Preferred DNS to: 192.168.1.100</li>
+                            <li>Save the changes</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div id="macos" class="tab-content" style="display: none;">
+                    <div class="tab-title">macOS Setup</div>
+                    <div class="tab-text">
+                        <ol>
+                            <li>Open System Settings > Network</li>
+                            <li>Select your Wi-Fi or Ethernet connection</li>
+                            <li>Click Details > DNS</li>
+                            <li>Click the + button and add: 192.168.1.100</li>
+                            <li>Click OK to save</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div id="android" class="tab-content" style="display: none;">
+                    <div class="tab-title">Android Setup</div>
+                    <div class="tab-text">
+                        <ol>
+                            <li>Open Settings > Network & internet > Advanced > Private DNS</li>
+                            <li>Select "Private DNS provider hostname"</li>
+                            <li>Enter: dns.reventor.eu</li>
+                            <li>Tap Save</li>
+                        </ol>
+                        <strong>Note:</strong> Requires Android 9+ and a DNS-over-TLS compatible server.
+                    </div>
+                </div>
+
+                <div id="ios" class="tab-content" style="display: none;">
+                    <div class="tab-title">iOS Setup</div>
+                    <div class="tab-text">
+                        <ol>
+                            <li>Open Settings > Wi-Fi</li>
+                            <li>Tap the info (i) icon next to your Wi-Fi network</li>
+                            <li>Scroll to DNS section and tap Configure DNS</li>
+                            <li>Select Manual and add: dns.reventor.eu</li>
+                            <li>Tap Save</li>
+                        </ol>
+                        <strong>Note:</strong> For encrypted DNS, ensure your server supports DNS-over-HTTPS.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <a href="https://kutt.it/9eDqsx" target="_blank" rel="noopener">
+            <img src="https://reventor.eu/footer-banner/reventor-footer-banner-white.svg" alt="Webdesign by REVENTOR" class="banner">
+        </a>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.style.display = 'none');
+
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(button => button.classList.remove('active'));
+
+            // Show selected tab
+            document.getElementById(tabName).style.display = 'block';
+
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

@@ -191,16 +191,9 @@ const getTabs = ({ tlsAddress, httpsAddress, showDnsPrivacyNotice, serverName, p
             'install_devices_router_list_1',
             'install_devices_router_list_2',
             'install_devices_router_list_3',
-
-            // eslint-disable-next-line react/jsx-key
-            <Trans
-                components={[
-                    <a href="#dhcp" key="0">
-                        link
-                    </a>,
-                ]}>
-                install_devices_router_list_4
-            </Trans>,
+            'install_devices_router_list_4',
+            'install_devices_router_list_5',
+            'install_devices_router_list_6',
         ],
     },
     Windows: {
@@ -211,7 +204,6 @@ const getTabs = ({ tlsAddress, httpsAddress, showDnsPrivacyNotice, serverName, p
             'install_devices_windows_list_3',
             'install_devices_windows_list_4',
             'install_devices_windows_list_5',
-            'install_devices_windows_list_6',
         ],
     },
     macOS: {
@@ -221,6 +213,7 @@ const getTabs = ({ tlsAddress, httpsAddress, showDnsPrivacyNotice, serverName, p
             'install_devices_macos_list_2',
             'install_devices_macos_list_3',
             'install_devices_macos_list_4',
+            'install_devices_macos_list_5',
         ],
     },
     Android: {
@@ -240,6 +233,8 @@ const getTabs = ({ tlsAddress, httpsAddress, showDnsPrivacyNotice, serverName, p
             'install_devices_ios_list_2',
             'install_devices_ios_list_3',
             'install_devices_ios_list_4',
+            'install_devices_ios_list_5',
+            'install_devices_ios_list_6',
         ],
     },
     dns_privacy: {
