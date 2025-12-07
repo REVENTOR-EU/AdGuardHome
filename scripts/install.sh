@@ -71,15 +71,65 @@ is_little_endian() {
 	[ "$is_little_endian_result" -eq '1' ]
 }
 
+# Function install_requirements installs missing required software.
+install_requirements() {
+	case "$os" in
+	'linux')
+		# Assume Ubuntu/Debian with apt
+		missing=""
+		for cmd in $required; do
+			if ! is_command "$cmd"; then
+				case "$cmd" in
+				'tar')
+					missing="$missing tar"
+					;;
+				'git')
+					missing="$missing git"
+					;;
+				'make')
+					missing="$missing make"
+					;;
+				'go')
+					missing="$missing golang-go"
+					;;
+				'node')
+					missing="$missing nodejs"
+					;;
+				'npm')
+					missing="$missing npm"
+					;;
+				esac
+			fi
+		done
+		if [ "$missing" != "" ]; then
+			log "installing missing requirements: $missing"
+			apt update && apt install -y $missing
+		fi
+		;;
+	'darwin')
+		# macOS with brew or something, but for now error
+		error_exit "please install required software manually on macOS: $required_darwin"
+		;;
+	'freebsd' | 'openbsd')
+		# For BSD, error for now
+		error_exit "please install required software manually on $os: $required_unix"
+		;;
+	*)
+		error_exit "unsupported operating system: '$os'"
+		;;
+	esac
+}
+
 # Function check_required checks if the required software is available on the
 # machine.  The required software:
 #
 #   unzip (macOS) / tar (other unixes)
+#   git, make, go, node, npm
 #
 # curl/wget are checked in function configure.
 check_required() {
-	required_darwin="unzip"
-	required_unix="tar"
+	required_darwin="unzip git make go node npm"
+	required_unix="tar git make go node npm"
 	readonly required_darwin required_unix
 
 	case "$os" in
@@ -95,6 +145,8 @@ check_required() {
 		;;
 	esac
 	readonly required
+
+	install_requirements
 
 	# Don't use quotes to get word splitting.
 	for cmd in $required; do
@@ -384,12 +436,11 @@ configure() {
 	set_sudo_cmd
 	check_out_dir
 
-	pkg_name="AdGuardHome_${os}_${cpu}.${pkg_ext}"
-	url="https://static.adtidy.org/adguardhome/${channel}/${pkg_name}"
+	repo_url="https://github.com/REVENTOR-EU/AdGuardHome.git"
 	agh_dir="${out_dir}/AdGuardHome"
-	readonly pkg_name url agh_dir
+	readonly repo_url agh_dir
 
-	log "AdGuard Home will be installed into $agh_dir"
+	log "AdGuard Home will be cloned and built in $agh_dir"
 }
 
 # Function is_root checks for root privileges to be granted.
@@ -417,7 +468,7 @@ please, restart it with root privileges'
 #
 # TODO(e.burkov): Try to avoid restarting.
 rerun_with_root() {
-	script_url='https://raw.githubusercontent.com/AdguardTeam/AdGuardHome/master/scripts/install.sh'
+	script_url='https://raw.githubusercontent.com/REVENTOR-EU/AdGuardHome/master/scripts/install.sh'
 	readonly script_url
 
 	r='-R'
@@ -451,46 +502,28 @@ rerun_with_root() {
 	exit 0
 }
 
-# Function download downloads the file from the URL and saves it to the
-# specified filepath.
-download() {
-	log "downloading package from $url to $pkg_name"
+# Function clone clones the repository.
+clone() {
+	log "cloning repository from $repo_url to $agh_dir"
 
-	if ! "$download_func" "$url" "$pkg_name"; then
-		error_exit "cannot download the package from $url into $pkg_name"
+	if ! git clone "$repo_url" "$agh_dir"; then
+		error_exit "cannot clone the repository from $repo_url into $agh_dir"
 	fi
 
-	log "successfully downloaded $pkg_name"
+	log "successfully cloned repository"
 }
 
-# Function unpack unpacks the passed archive depending on it's extension.
-unpack() {
-	log "unpacking package from $pkg_name into $out_dir"
+# Function build builds AdGuard Home from source.
+build() {
+	log "building AdGuard Home from source in $agh_dir"
 
-	# shellcheck disable=SC2174
-	if ! mkdir -m 0700 -p "$out_dir"; then
-		error_exit "cannot create directory $out_dir"
+	cd "$agh_dir" || error_exit "cannot change to directory $agh_dir"
+
+	if ! make; then
+		error_exit "cannot build AdGuard Home"
 	fi
 
-	case "$pkg_ext" in
-	'zip')
-		unzip "$pkg_name" -d "$out_dir"
-		;;
-	'tar.gz')
-		tar -C "$out_dir" -f "$pkg_name" -x -z
-		;;
-	*)
-		error_exit "unexpected package extension: '$pkg_ext'"
-		;;
-	esac
-
-	unpacked_contents="$(
-		echo
-		ls -l -A "$agh_dir"
-	)"
-	log "successfully unpacked, contents: $unpacked_contents"
-
-	rm "$pkg_name"
+	log "successfully built AdGuard Home"
 }
 
 # Function handle_existing detects the existing AGH installation and takes care
@@ -583,18 +616,18 @@ parse_opts "$@"
 echo 'starting AdGuard Home installation script'
 
 configure
-check_required
 
 if ! is_root; then
 	rerun_with_root
 fi
 # Needs rights.
 fix_freebsd
+check_required
 
 handle_existing
 
-download
-unpack
+clone
+build
 
 install_service
 
